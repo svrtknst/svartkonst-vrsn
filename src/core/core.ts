@@ -9,9 +9,9 @@
 /**
  * Yes indeed, the trick to this is just wedging a cons list in there. 
  */
-type First = [];
-type Later<T> = [T, Vrsn<T>];
-export type Vrsn<T> = Later<T> | First;
+type Empty = [];
+type Change<T> = [T, Vrsn<T>];
+export type Vrsn<T> = Change<T> | Empty;
 
 export function vrsn<T>(startWith?: T): Vrsn<T> {
   if (startWith) {
@@ -40,13 +40,12 @@ export function update<T>(history: Vrsn<T>, fn: (v: T) => T): Vrsn<T> {
   return commit(history, fn(current(history)));
 }
 
-export function current<_>(history: First, otherwise: void): undefined;
-export function current<T>(history: First, otherwise: T): Readonly<T>;
-export function current<T>(history: Later<T>): Readonly<T>;
-export function current<T>(history: Vrsn<T>, otherwise?: T): Readonly<T> | undefined {
+export function current<T>(history: Change<T>): Readonly<T>;
+export function current<T>(history: Empty): undefined;
+export function current<T>(history: Vrsn<T>): Readonly<T> | undefined {
   const [current, _] = history;
 
-  return current ?? otherwise;
+  return current;
 }
 
 export function undo<T>(history: Vrsn<T>, count = 1): Vrsn<T> {
@@ -88,11 +87,11 @@ function _size(history: Vrsn<unknown>, acc = 0): number {
 }
 
 
-export function isEmpty(history: Vrsn<unknown>): history is First {
+export function isEmpty(history: Vrsn<unknown>): history is Empty {
   return history.length === 0;
 }
 
-export function hasChanged<T>(history: Vrsn<T>): history is Later<T> {
+export function hasChanged<T>(history: Vrsn<T>): history is Change<T> {
   return !isEmpty(history);
 }
 

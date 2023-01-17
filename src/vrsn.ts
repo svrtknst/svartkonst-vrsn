@@ -1,6 +1,6 @@
 import { hasChanged, commit, isEmpty, vrsn, Vrsn as t, size, undo, update, current } from './core';
 
-  
+
 export class Vrsn<T> {
   get isEmpty(): boolean {
     return isEmpty(this.history);
@@ -11,7 +11,12 @@ export class Vrsn<T> {
   }
 
   get current(): T | undefined {
-    return current(this.history, undefined);
+    // unclear why this isnt handled by the overloads...
+    if (isEmpty(this.history)) {
+      return undefined;
+    }
+
+    return current(this.history);
   }
 
   constructor(
@@ -53,8 +58,8 @@ export class Vrsn<T> {
   /**
    * Return the oldest non-empty value. 
    */
-  oldest(): T {
-    const [v, _] = undo(this.size - 1);
+  oldest(): T | undefined {
+    const [v, _] = undo(this.history, this.size - 1);
 
     return v;
   }
