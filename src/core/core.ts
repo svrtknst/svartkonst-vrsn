@@ -13,8 +13,8 @@ type Empty = [];
 type Change<T> = [T, Vrsn<T>];
 export type Vrsn<T> = Change<T> | Empty;
 
-export function vrsn<T>(startWith?: T): Vrsn<T> {
-  if (startWith) {
+export function vrsn<T>(startWith?: T | undefined): Vrsn<T | undefined> {
+  if (startWith === null || startWith === undefined) {
     return commit(empty(), startWith);
   }
 

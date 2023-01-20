@@ -24,7 +24,7 @@ export class Vrsn<T> {
     public readonly size: number
   ) { }
 
-  static of<T>(startWith: T): Vrsn<T> {
+  static of<T>(startWith: T | undefined): Vrsn<T | undefined> {
     const history = vrsn(startWith);
 
     return new Vrsn(
