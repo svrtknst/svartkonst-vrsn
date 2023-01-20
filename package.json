@@ -1,6 +1,6 @@
 {
   "name": "@svartkonst/vrsn",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.1-0",
   "description": "a small lib/data structure to handle data changes and history",
   "source": "src/index.ts",
   "main": "dist/index.js",
